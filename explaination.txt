@@ -1,0 +1,58 @@
+What is this coursework about?
+Imagine you ask Google Maps "how do I get from London to Edinburgh?"
+
+Google Maps doesn't just give you ONE route. It finds the fastest/cheapest route out of many possible ones.
+
+This coursework does the exact same thing — but for database queries.
+
+The Problem
+When you write a SQL query like:
+
+
+SELECT name FROM Person, Project WHERE person.id = project.manager
+The database has to join two tables together. But there are multiple ways to do it:
+
+Combine ALL rows first, then filter → slow
+Filter first, then combine → fast
+Your job is to build the part of the database that figures out the fastest way.
+
+The Two Things You Build
+1. Estimator — "The Guesser"
+Before you can find the fastest route, you need to estimate how big each step will be.
+
+Like Google Maps estimating "this road has 1000 cars on it right now."
+
+For example:
+
+Table A has 100 rows, Table B has 150 rows
+If you combine them blindly → 15,000 rows (huge!)
+If you join them smartly → 1,000 rows (much smaller)
+The Estimator looks at each step and says "this step will produce X rows" using simple maths formulas given in the spec.
+
+2. Optimiser — "The Planner"
+Once you can estimate sizes, the Optimiser picks the best order of operations.
+
+It takes the dumb plan the database starts with:
+
+
+Step 1: Combine ALL of A and B  →  15,000 rows
+Step 2: Filter down             →   1,000 rows
+Step 3: Keep only needed cols   →   1,000 rows
+And rebuilds it into the smart plan:
+
+
+Step 1: Join A and B smartly    →   1,000 rows  (skip the 15,000 step entirely)
+Step 2: Keep only needed cols   →   1,000 rows
+Same answer. Way less work.
+
+How it actually runs
+
+You give it:  Table A (100 rows), Table B (150 rows), condition: a2=b3
+
+Dumb plan:    A × B = 15,000 rows → filter → 1,000 rows   ← bad
+Smart plan:   A JOIN B = 1,000 rows directly               ← good
+
+Both give the same 1,000 rows at the end.
+The optimiser's job is to find the smart plan automatically.
+In one sentence
+You are building the brain of a database that looks at a slow, dumb query plan and rewrites it into a fast, smart one — by estimating how big each step would be and picking the order that keeps intermediate results as small as possible.

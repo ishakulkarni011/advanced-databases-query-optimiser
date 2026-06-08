@@ -1,0 +1,13 @@
+# Compiled class files
+*.class
+sjdb/bin/
+
+# Coursework description
+Coursework.txt
+
+# macOS
+.DS_Store
+
+# IDE
+.idea/
+*.iml
