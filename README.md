@@ -1,7 +1,6 @@
 # Database Query Optimiser — SJDB
 
 **COMP3211: Advanced Databases**  
-University of Southampton
 
 ## Overview
 
